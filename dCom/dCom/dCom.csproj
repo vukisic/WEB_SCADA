@@ -73,6 +73,7 @@
     <Compile Include="ControlWindow.xaml.cs">
       <DependentUpon>ControlWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Providers\DataProvider.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="ViewModel\PointViewModels\AnalaogInput.cs" />
     <Compile Include="ViewModel\PointViewModels\AnalogBase.cs" />

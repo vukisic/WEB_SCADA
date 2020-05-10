@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace dCom.Configuration
 {
-    internal class ConfigItem : IConfigItem
+	internal class ConfigItem : IConfigItem
 	{
 		#region Fields
 
@@ -25,7 +25,7 @@ namespace dCom.Configuration
 		private ushort abnormalValue;
 		private double highLimit;
 		private double lowLimit;
-        private int secondsPassedSinceLastPoll;
+		private int secondsPassedSinceLastPoll;
 
 		#endregion Fields
 
@@ -251,22 +251,22 @@ namespace dCom.Configuration
 			}
 		}
 
-        public int SecondsPassedSinceLastPoll
-        {
-            get
-            {
-                return secondsPassedSinceLastPoll;
-            }
+		public int SecondsPassedSinceLastPoll
+		{
+			get
+			{
+				return secondsPassedSinceLastPoll;
+			}
 
-            set
-            {
-                secondsPassedSinceLastPoll = value;
-            }
-        }
+			set
+			{
+				secondsPassedSinceLastPoll = value;
+			}
+		}
 
-        #endregion Properties
+		#endregion Properties
 
-        public ConfigItem(List<string> configurationParameters)
+		public ConfigItem(List<string> configurationParameters)
 		{
 			RegistryType = GetRegistryType(configurationParameters[0]);
 			int temp;
@@ -285,40 +285,46 @@ namespace dCom.Configuration
 			DefaultValue = (ushort)temp;
 			ProcessingType = configurationParameters[7];
 			Description = configurationParameters[8].TrimStart('@');
-            if (configurationParameters[9].Equals("#"))
-            {
-                AcquisitionInterval = 1;
-            }
-            else
-            {
-                Int32.TryParse(configurationParameters[9], out temp);
-                AcquisitionInterval = temp;
-            }
+			if (configurationParameters[9].Equals("#"))
+			{
+				AcquisitionInterval = 1;
+			}
+			else
+			{
+				Int32.TryParse(configurationParameters[9], out temp);
+				AcquisitionInterval = temp;
+			}
 
-            if (configurationParameters[10].Equals("#"))
-            {
-                ScaleFactor = 1;
-                Deviation = 0;
-            }
-            else
-            {
-                Double.TryParse(configurationParameters[10], out doubleTemp);
-                ScaleFactor = doubleTemp;
-                Double.TryParse(configurationParameters[11], out doubleTemp);
-                Deviation = doubleTemp;
-            }
+			if (configurationParameters[10].Equals("#"))
+			{
+				ScaleFactor = 1;
+				Deviation = 0;
+			}
+			else
+			{
+				Double.TryParse(configurationParameters[10], out doubleTemp);
+				ScaleFactor = doubleTemp;
+				Double.TryParse(configurationParameters[11], out doubleTemp);
+				Deviation = doubleTemp;
+			}
 
-            if(RegistryType==PointType.ANALOG_INPUT || RegistryType == PointType.ANALOG_OUTPUT)
-            {
-                Double.TryParse(configurationParameters[13], out doubleTemp);
-                HighLimit = doubleTemp;
-            }
-            else
-            {
-                Int32.TryParse(configurationParameters[12], out temp);
-                AbnormalValue = (ushort)temp;
-            }
-        }
+			if(RegistryType==PointType.ANALOG_INPUT || RegistryType == PointType.ANALOG_OUTPUT)
+			{
+				Double.TryParse(configurationParameters[13], out doubleTemp);
+				LowLimit = doubleTemp;
+				Double.TryParse(configurationParameters[14], out doubleTemp);
+				HighLimit = doubleTemp;
+				Double.TryParse(configurationParameters[15], out doubleTemp);
+				EGU_Min = doubleTemp;
+				Double.TryParse(configurationParameters[16], out doubleTemp);
+				EGU_Max = doubleTemp;
+			}
+			else
+			{
+				Int32.TryParse(configurationParameters[12], out temp);
+				AbnormalValue = (ushort)temp;
+			}
+		}
 
 		private PointType GetRegistryType(string registryTypeName)
 		{

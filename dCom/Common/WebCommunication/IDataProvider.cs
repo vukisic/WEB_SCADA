@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Common.WebCommunication
 {
-    public interface IDataManager
+    public interface IDataProvider
     {
-        object GetConfig();
-        object GetValue(object obj);
-        object GetValues();
+        List<IConfigItem> GetConfig();
+        string GetJsonConfig();
     }
 }
