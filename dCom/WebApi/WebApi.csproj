@@ -16,7 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Modbus">
+      <HintPath>..\3rdPartyLibs\Modbus.dll</HintPath>
+    </Reference>
     <Reference Include="System.ServiceModel" />
+    <Reference Include="WindowsBase">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\WindowsBase.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

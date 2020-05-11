@@ -1,6 +1,6 @@
 ﻿using Common;
 
-namespace dCom.ViewModel
+namespace WebApi.ViewModel
 {
     public abstract class AnalogBase : BasePointItem, IAnalogPoint 
 	{
@@ -33,9 +33,9 @@ namespace dCom.ViewModel
 			}
 		}
 
-        protected override bool WriteCommand_CanExecute(object obj)
-        {
-            return false;
-        }
-    }
+		protected override bool WriteCommand_CanExecute(object obj)
+		{
+			return false;
+		}
+	}
 }

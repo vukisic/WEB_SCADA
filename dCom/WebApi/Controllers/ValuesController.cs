@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Common.WebCommunication;
-using dCom.Providers;
+using dCom.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Providers;
+using WebApi.ViewModels;
 
 namespace WebApi.Controllers
 {
@@ -12,12 +14,17 @@ namespace WebApi.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        Main main;
+        public ValuesController()
+        {
+            main = Singleton.GetSingleton().main;
+        }
         // GET api/values
         [HttpGet]
-        public ActionResult<string> Get()
+        public ActionResult<IEnumerable<BasePointItem>> Get()
         {
-            IDataProvider provider = new DataProvider();
-            return provider.GetJsonConfig();
+            
+            return Ok(new { status = main.ConnectionState, list = main.Points.ToList() });
         }
 
         // GET api/values/5

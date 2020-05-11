@@ -1,7 +1,4 @@
 ﻿using Common;
-using dCom.Configuration;
-using dCom.Providers;
-using dCom.Utils;
 using Modbus.Connection;
 using ProcessingModule;
 using System;
@@ -10,11 +7,15 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Threading;
+using WebApi.Configuration;
+using WebApi.ViewModel;
+using WebApi.ViewModels.PoinViewModels;
 
-namespace dCom.ViewModel
+namespace WebApi.ViewModels
 {
-	internal class MainViewModel : ViewModelBase, IDisposable, IStateUpdater, IStorage
+	public class Main : ViewModelBase, IDisposable, IStateUpdater, IStorage
 	{
 		public ObservableCollection<BasePointItem> Points { get; set; }
 
@@ -27,7 +28,6 @@ namespace dCom.ViewModel
 		private AutoResetEvent acquisitionTrigger = new AutoResetEvent(false);
 		private AutoResetEvent automationTrigger = new AutoResetEvent(false);
 		private TimeSpan elapsedTime = new TimeSpan();
-		private Dispatcher dispather = Dispatcher.CurrentDispatcher;
 		private string logText;
 		private StringBuilder logBuilder;
 		private DateTime currentTime;
@@ -39,7 +39,7 @@ namespace dCom.ViewModel
 		private IProcessingManager processingManager = null;
 		#endregion Fields
 
-		event EventHandler<UpdateDataEventArgs> updateEvent;
+		//event EventHandler<UpdateDataEventArgs> updateEvent;
 		Dictionary<int, IPoint> pointsCache = new Dictionary<int, IPoint>();
 
 		#region Properties
@@ -68,7 +68,7 @@ namespace dCom.ViewModel
 			set
 			{
 				connectionState = value;
-				if(connectionState == ConnectionState.CONNECTED)
+				if (connectionState == ConnectionState.CONNECTED)
 				{
 					automationManager.Start(configuration.DelayBetweenCommands);
 				}
@@ -106,7 +106,7 @@ namespace dCom.ViewModel
 
 		#endregion Properties
 
-		public MainViewModel()
+		public Main()
 		{
 			configuration = new ConfigReader();
 			commandExecutor = new FunctionExecutor(this, configuration);
@@ -117,8 +117,8 @@ namespace dCom.ViewModel
 			InitializeAndStartThreads();
 			logBuilder = new StringBuilder();
 			ConnectionState = ConnectionState.DISCONNECTED;
-			ApiUpdater updater = new ApiUpdater();
-			updateEvent += updater.Update;
+			//ApiUpdater updater = new ApiUpdater();
+			//updateEvent += updater.Update;
 			Thread.CurrentThread.Name = "Main Thread";
 		}
 
@@ -205,11 +205,7 @@ namespace dCom.ViewModel
 
 		public void UpdateConnectionState(ConnectionState currentConnectionState)
 		{
-			dispather.Invoke((Action)(() =>
-			{
-				ConnectionState = currentConnectionState;
-				updateEvent?.Invoke(this, new UpdateDataEventArgs(Points.ToList()));
-			}));
+			ConnectionState = currentConnectionState;
 		}
 
 		public void LogMessage(string message)
@@ -218,15 +214,11 @@ namespace dCom.ViewModel
 				return;
 
 			string threadName = Thread.CurrentThread.Name;
-
-			dispather.Invoke((Action)(() =>
+			lock (lockObject)
 			{
-				lock (lockObject)
-				{
-					logBuilder.Append($"{DateTime.Now} [{threadName}]: {message}{Environment.NewLine}");
-					LogText = logBuilder.ToString();
-				}
-			}));
+				logBuilder.Append($"{DateTime.Now} [{threadName}]: {message}{Environment.NewLine}");
+				LogText = logBuilder.ToString();
+			}
 		}
 
 		#endregion IStateUpdater implementation

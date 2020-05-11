@@ -3,8 +3,9 @@ using dCom.Utils;
 using System;
 using System.ComponentModel;
 using System.Windows.Threading;
+using WebApi.ViewModels.PoinViewModels;
 
-namespace dCom.ViewModel
+namespace WebApi.ViewModel
 {
 	public abstract class BasePointItem : ViewModelBase, IDataErrorInfo
 	{
@@ -45,7 +46,7 @@ namespace dCom.ViewModel
 			this.configuration = configuration;
 
 			this.type = c.RegistryType;
-			this.address = (ushort)(c.StartAddress+i);
+			this.address = (ushort)(c.StartAddress + i);
 			this.name = $"{configItem.Description} [{i}]";
 			this.rawValue = configItem.DefaultValue;
 			this.pointId = PointIdentifierHelper.GetNewPointId(new PointIdentifier(this.type, this.address));
