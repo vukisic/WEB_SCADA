@@ -1,0 +1,15 @@
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.green {
+  color: #79d70f;
+}
+
+.red {
+  color: #d32626;
+}
+
+.inAlarm {
+  background-color: #d32626;
+}

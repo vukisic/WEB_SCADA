@@ -21,7 +21,7 @@ namespace WebApi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            Main main = new Main();
+            Singleton.GetSingleton();
         }
 
         public IConfiguration Configuration { get; }

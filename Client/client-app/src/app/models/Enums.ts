@@ -1,0 +1,15 @@
+export enum AlarmType {
+  NO_ALARM = 0x01,
+	REASONABILITY_FAILURE = 0x02,
+  LOW_ALARM = 0x03,
+  HIGH_ALARM = 0x04,
+  ABNORMAL_VALUE = 0x05
+}
+
+export enum PointType {
+  DIGITAL_OUTPUT = 0x01,
+	DIGITAL_INPUT = 0x02,
+	ANALOG_INPUT = 0x03,
+	ANALOG_OUTPUT = 0x04,
+	HR_LONG = 0x05,
+}

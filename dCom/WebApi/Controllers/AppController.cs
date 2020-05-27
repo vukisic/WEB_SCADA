@@ -23,7 +23,7 @@ namespace WebApi.Controllers
 
         public IActionResult Get()
         {
-            var timerManager = new TimerManager(() => _hub.Clients.All.SendAsync("recieveMsg", new { status = Singleton.GetSingleton().main.ConnectionState, list = Singleton.GetSingleton().main.Points.ToList() }));
+            var timerManager = new TimerManager(() => _hub.Clients.All.SendAsync("recieveMsg", new { status = Singleton.GetSingleton().ConnectionState, list = Singleton.GetSingleton().Points.ToList() }));
             return Ok(new { Message = "Request Completed" });
         }
     }

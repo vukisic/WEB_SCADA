@@ -11,7 +11,7 @@ namespace WebApi.Hubs
     {
         public async Task SendMessage()
         {
-            await Clients.All.SendAsync("recieveMsg", new { status = Singleton.GetSingleton().main.ConnectionState, list = Singleton.GetSingleton().main.Points.ToList() });
+            await Clients.All.SendAsync("recieveMsg", new { status = Singleton.GetSingleton().ConnectionState, list = Singleton.GetSingleton().Points.ToList() });
         }
             
     }

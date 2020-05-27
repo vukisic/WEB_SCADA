@@ -70,7 +70,13 @@ namespace WebApi.ViewModels
 				connectionState = value;
 				if (connectionState == ConnectionState.CONNECTED)
 				{
+					if(automationManager == null)
+						automationManager = new AutomationManager(this, processingManager, automationTrigger, configuration);
 					automationManager.Start(configuration.DelayBetweenCommands);
+				}
+				else
+				{
+					automationManager.Stop();
 				}
 				OnPropertyChanged("ConnectionState");
 			}
@@ -116,9 +122,7 @@ namespace WebApi.ViewModels
 			InitializePointCollection();
 			InitializeAndStartThreads();
 			logBuilder = new StringBuilder();
-			ConnectionState = ConnectionState.DISCONNECTED;
-			//ApiUpdater updater = new ApiUpdater();
-			//updateEvent += updater.Update;
+			//ConnectionState = ConnectionState.DISCONNECTED;
 			Thread.CurrentThread.Name = "Main Thread";
 		}
 

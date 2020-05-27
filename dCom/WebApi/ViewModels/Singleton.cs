@@ -7,21 +7,20 @@ namespace WebApi.ViewModels
 {
     public class Singleton
     {
-        public Main main;
+        private static Main main;
         private static Singleton inst;
         private Singleton()
         {
             
         }
 
-        public static Singleton GetSingleton()
+        public static Main GetSingleton()
         {
-            if(inst == null)
+            if(main == null)
             {
-                inst = new Singleton();
-                inst.main = new Main();
+                main = new Main();
             }
-            return inst;
+            return main;
         }
     }
 }

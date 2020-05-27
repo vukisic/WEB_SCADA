@@ -17,7 +17,7 @@ namespace WebApi.Controllers
         Main main;
         public ValuesController()
         {
-            main = Singleton.GetSingleton().main;
+            main = Singleton.GetSingleton();
         }
         // GET api/values
         [HttpGet]
