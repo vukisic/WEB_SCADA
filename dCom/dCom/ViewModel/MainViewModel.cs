@@ -1,6 +1,5 @@
 ﻿using Common;
 using dCom.Configuration;
-using dCom.Providers;
 using dCom.Utils;
 using Modbus.Connection;
 using ProcessingModule;
@@ -38,8 +37,6 @@ namespace dCom.ViewModel
 		IConfiguration configuration;
 		private IProcessingManager processingManager = null;
 		#endregion Fields
-
-		event EventHandler<UpdateDataEventArgs> updateEvent;
 		Dictionary<int, IPoint> pointsCache = new Dictionary<int, IPoint>();
 
 		#region Properties
@@ -117,8 +114,6 @@ namespace dCom.ViewModel
 			InitializeAndStartThreads();
 			logBuilder = new StringBuilder();
 			ConnectionState = ConnectionState.DISCONNECTED;
-			ApiUpdater updater = new ApiUpdater();
-			updateEvent += updater.Update;
 			Thread.CurrentThread.Name = "Main Thread";
 		}
 
@@ -208,7 +203,6 @@ namespace dCom.ViewModel
 			dispather.Invoke((Action)(() =>
 			{
 				ConnectionState = currentConnectionState;
-				updateEvent?.Invoke(this, new UpdateDataEventArgs(Points.ToList()));
 			}));
 		}
 

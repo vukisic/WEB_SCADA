@@ -3,6 +3,7 @@ import * as signalR from '@aspnet/signalr';
 import { environment } from 'src/environments/environment';
 import { ResponseModel } from '../models/ResponseModel';
 import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,10 +15,10 @@ export class SignalRService {
   // Observable navItem stream
   navItem$ = this.navItemSource.asObservable();
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   // service command
-  changeNav(model: ResponseModel) {
+  public changeNav(model: ResponseModel) {
     this.navItemSource.next(model);
   }
 
@@ -32,9 +33,20 @@ export class SignalRService {
       .catch(err => console.log('Error while starting connection: ' + err));
   }
 
-  public addTransferChartDataListener = () => {
+  public addDataListener = () => {
     this.hubConnection.on('recieveMsg', (data: ResponseModel) => {
       this.changeNav(data);
     });
+  }
+
+  public startHttpRequest = () => {
+    this.http.get(`https://localhost:${environment.port}/api/app`)
+      .subscribe(res => {
+        console.log(res);
+      });
+  }
+
+  public getLogs = () => {
+    return this.http.get(`https://localhost:${environment.port}/api/app/logs`);
   }
 }

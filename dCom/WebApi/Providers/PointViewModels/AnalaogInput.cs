@@ -1,6 +1,6 @@
 ﻿using Common;
 
-namespace WebApi.ViewModel
+namespace WebApi.Providers
 {
 	internal class AnalaogInput : AnalogBase
 	{

@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="offset-md-5 col-md-4 mt-3">
+    <i *ngIf="!status()" class="fas fa-circle text-center red">&nbsp;&nbsp;DISCONNECTED</i>
+    <i *ngIf="status()" class="fas fa-circle text-center green">&nbsp;&nbsp;CONNECTED</i>
+  </div>
+</div>
+<hr>
+<app-spiner *ngIf="data === null || data === undefined"></app-spiner>
+<div *ngIf="data !== null && data !== undefined" class="row">
+  <div class="offset-md-1 col-md-10">
+    <button class="btn btn-lg btn-success mt-3 mb-3" type="button" id="logs" (click)="onLogsClick()" data-toggle="modal" data-target="#logModal">Log</button>
+    <br>
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Address</th>
+          <th>Value</th>
+          <th>Raw Value</th>
+          <th>Timestamp</th>
+          <th>Alarm</th>
+          <th>Command</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of data?.list" [ngClass]="{'inAlarm': item.alarm !== 1 }">
+          <td>{{item.name}}</td>
+          <td>{{item.type | typePipe}}</td>
+          <td>{{item.address}}</td>
+          <td>{{item.displayValue}}</td>
+          <td>{{item.rawValue}}</td>
+          <td>{{item.timestamp | timestampPipe}}</td>
+          <td>{{item.alarm | alarmPipe}}</td>
+          <td><button class="btn btn-success">Command</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!--Modal Dialogs-->
+<div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="logModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="LogModal">Log</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <app-spiner *ngIf="log === null || log === undefined"></app-spiner>
+      <div *ngIf="log !== null || log !== undefined">
+        <ul  *ngFor="let l of log">
+          <li>{{l}}</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

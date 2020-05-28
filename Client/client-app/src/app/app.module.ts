@@ -10,6 +10,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TypePipe } from './pipes/typePipe.pipe';
 import { AlarmPipe } from './pipes/alarmPipe.pipe';
 import { TimestampPipe } from './pipes/timestampPipe.pipe';
+import { SpinerComponent } from './components/common/spiner/spiner.component';
+import { NavComponent } from './components/nav/nav.component';
+import { MainComponent } from './components/main/main.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +20,9 @@ import { TimestampPipe } from './pipes/timestampPipe.pipe';
     TypePipe,
     AlarmPipe,
     TimestampPipe,
+    SpinerComponent,
+    NavComponent,
+    MainComponent,
   ],
   imports: [
     BrowserModule,

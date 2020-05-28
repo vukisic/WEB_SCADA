@@ -10,12 +10,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using WebApi.Configuration;
-using WebApi.ViewModel;
-using WebApi.ViewModels.PoinViewModels;
 
-namespace WebApi.ViewModels
+namespace WebApi.Providers
 {
-	public class Main : ViewModelBase, IDisposable, IStateUpdater, IStorage
+	public class DComCore : IDisposable, IStateUpdater, IStorage
 	{
 		public ObservableCollection<BasePointItem> Points { get; set; }
 
@@ -27,10 +25,8 @@ namespace WebApi.ViewModels
 		private Acquisitor acquisitor;
 		private AutoResetEvent acquisitionTrigger = new AutoResetEvent(false);
 		private AutoResetEvent automationTrigger = new AutoResetEvent(false);
-		private TimeSpan elapsedTime = new TimeSpan();
 		private string logText;
 		private StringBuilder logBuilder;
-		private DateTime currentTime;
 		private IFunctionExecutor commandExecutor;
 		private IAutomationManager automationManager;
 		private bool timerThreadStopSignal = true;
@@ -38,25 +34,9 @@ namespace WebApi.ViewModels
 		IConfiguration configuration;
 		private IProcessingManager processingManager = null;
 		#endregion Fields
-
-		//event EventHandler<UpdateDataEventArgs> updateEvent;
 		Dictionary<int, IPoint> pointsCache = new Dictionary<int, IPoint>();
 
 		#region Properties
-
-		public DateTime CurrentTime
-		{
-			get
-			{
-				return currentTime;
-			}
-
-			set
-			{
-				currentTime = value;
-				OnPropertyChanged("CurrentTime");
-			}
-		}
 
 		public ConnectionState ConnectionState
 		{
@@ -78,7 +58,6 @@ namespace WebApi.ViewModels
 				{
 					automationManager.Stop();
 				}
-				OnPropertyChanged("ConnectionState");
 			}
 		}
 
@@ -92,27 +71,12 @@ namespace WebApi.ViewModels
 			set
 			{
 				logText = value;
-				OnPropertyChanged("LogText");
-			}
-		}
-
-		public TimeSpan ElapsedTime
-		{
-			get
-			{
-				return elapsedTime;
-			}
-
-			set
-			{
-				elapsedTime = value;
-				OnPropertyChanged("ElapsedTime");
 			}
 		}
 
 		#endregion Properties
 
-		public Main()
+		public DComCore()
 		{
 			configuration = new ConfigReader();
 			commandExecutor = new FunctionExecutor(this, configuration);
@@ -122,7 +86,6 @@ namespace WebApi.ViewModels
 			InitializePointCollection();
 			InitializeAndStartThreads();
 			logBuilder = new StringBuilder();
-			//ConnectionState = ConnectionState.DISCONNECTED;
 			Thread.CurrentThread.Name = "Main Thread";
 		}
 
@@ -184,10 +147,6 @@ namespace WebApi.ViewModels
 			timerWorker.Start();
 		}
 
-		/// <summary>
-		/// Timer thread:
-		///		Refreshes timers on UI and signalizes to acquisition thread that one second has elapsed
-		/// </summary>
 		private void TimerWorker_DoWork()
 		{
 			while (timerThreadStopSignal)
@@ -195,8 +154,6 @@ namespace WebApi.ViewModels
 				if (disposed)
 					return;
 
-				CurrentTime = DateTime.Now;
-				ElapsedTime = ElapsedTime.Add(new TimeSpan(0, 0, 1));
 				acquisitionTrigger.Set();
 				automationTrigger.Set();
 				Thread.Sleep(1000);
@@ -251,6 +208,11 @@ namespace WebApi.ViewModels
 				}
 			}
 			return retVal;
+		}
+
+		public string GetLog()
+		{
+			return logBuilder.ToString().Replace(Environment.NewLine,"|");
 		}
 	}
 }

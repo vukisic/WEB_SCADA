@@ -57,14 +57,12 @@
     <Compile Include="IStorage.cs" />
     <Compile Include="PointIdentifierHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serializers\IJsonSerializer.cs" />
-    <Compile Include="Serializers\JsonConfigItemModel.cs" />
-    <Compile Include="Serializers\JsonSerializer.cs" />
-    <Compile Include="WebCommunication\IDataProvider.cs" />
-    <Compile Include="WebCommunication\IEventUpdater.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WebCommunication\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

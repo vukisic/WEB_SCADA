@@ -1,19 +1,19 @@
 ﻿using Common;
 using System;
 
-namespace WebApi.ViewModel
+namespace WebApi.Providers
 {
-    internal class AnalogOutput : AnalogBase
+    internal class DigitalOutput : DigitalBase
 	{
 
-		public AnalogOutput(IConfigItem c, IProcessingManager processingManager, IStateUpdater stateUpdater, IConfiguration configuration, int i)
-			: base (c, processingManager, stateUpdater, configuration, i)
-		{		
+		public DigitalOutput(IConfigItem c, IProcessingManager processingManager, IStateUpdater stateUpdater, IConfiguration configuration, int i)
+			: base(c, processingManager, stateUpdater, configuration, i)
+		{
 		}
 
 		protected override bool WriteCommand_CanExecute(object obj)
 		{
-            return !(CommandedValue < configItem.MinValue || CommandedValue > ConfigItem.MaxValue);
+			return !(CommandedValue < 0 || CommandedValue > 1);
 		}
 
         protected override void WriteCommand_Execute(object obj)
