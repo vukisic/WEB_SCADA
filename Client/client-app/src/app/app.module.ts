@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ToastrModule } from 'ngx-toastr';
 
 import { TypePipe } from './pipes/typePipe.pipe';
 import { AlarmPipe } from './pipes/alarmPipe.pipe';
@@ -29,6 +31,9 @@ import { MainComponent } from './components/main/main.component';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

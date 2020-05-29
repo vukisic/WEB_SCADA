@@ -3,14 +3,15 @@ import * as signalR from '@aspnet/signalr';
 import { environment } from 'src/environments/environment';
 import { ResponseModel } from '../models/ResponseModel';
 import { BehaviorSubject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { RequestModel } from '../models/RequestModel';
 @Injectable({
   providedIn: 'root'
 })
 export class SignalRService {
 
   private data: ResponseModel;
-  private hubConnection: signalR.HubConnection;
+  public hubConnection: signalR.HubConnection;
   private navItemSource = new BehaviorSubject<ResponseModel>(this.data);
   // Observable navItem stream
   navItem$ = this.navItemSource.asObservable();
@@ -48,5 +49,9 @@ export class SignalRService {
 
   public getLogs = () => {
     return this.http.get(`https://localhost:${environment.port}/api/app/logs`);
+  }
+
+  public command = (pointId, address, value) => {
+    return this.http.post(`https://localhost:${environment.port}/api/app/command`, {pointId, address, value});
   }
 }

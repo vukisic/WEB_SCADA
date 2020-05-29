@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace WebApi.Configuration
 {
-	internal class ConfigItem : IConfigItem
+	public  class ConfigItem : IConfigItem
 	{
 		#region Fields
 
@@ -311,13 +311,13 @@ namespace WebApi.Configuration
 			if(RegistryType==PointType.ANALOG_INPUT || RegistryType == PointType.ANALOG_OUTPUT)
 			{
 				Double.TryParse(configurationParameters[13], out doubleTemp);
-				LowLimit = doubleTemp;
-				Double.TryParse(configurationParameters[14], out doubleTemp);
-				HighLimit = doubleTemp;
-				Double.TryParse(configurationParameters[15], out doubleTemp);
 				EGU_Min = doubleTemp;
-				Double.TryParse(configurationParameters[16], out doubleTemp);
+				Double.TryParse(configurationParameters[14], out doubleTemp);
 				EGU_Max = doubleTemp;
+				Double.TryParse(configurationParameters[15], out doubleTemp);
+				LowLimit = doubleTemp;
+				Double.TryParse(configurationParameters[16], out doubleTemp);
+				HighLimit = doubleTemp;
 			}
 			else
 			{

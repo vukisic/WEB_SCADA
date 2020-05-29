@@ -77,9 +77,12 @@ namespace ProcessingModule
         /// <param name="value">The value.</param>
         private void ExecuteAnalogCommand(IConfigItem configItem, ushort transactionId, byte remoteUnitAddress, ushort pointAddress, int value)
         {
-            ModbusWriteCommandParameters p = new ModbusWriteCommandParameters(6, (byte)ModbusFunctionCode.WRITE_SINGLE_REGISTER, pointAddress, eguConverter.ConvertToRaw(configItem.ScaleFactor,configItem.Deviation,value), transactionId, remoteUnitAddress);
-            IModbusFunction fn = FunctionFactory.CreateModbusFunction(p);
-            this.functionExecutor.EnqueueCommand(fn);
+            if (value >= configItem.LowLimit && value <= configItem.HighLimit)
+            {
+                ModbusWriteCommandParameters p = new ModbusWriteCommandParameters(6, (byte)ModbusFunctionCode.WRITE_SINGLE_REGISTER, pointAddress, eguConverter.ConvertToRaw(configItem.ScaleFactor, configItem.Deviation, value), transactionId, remoteUnitAddress);
+                IModbusFunction fn = FunctionFactory.CreateModbusFunction(p);
+                this.functionExecutor.EnqueueCommand(fn);
+            }
         }
 
         /// <summary>

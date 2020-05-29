@@ -4,6 +4,7 @@ using ProcessingModule;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -213,6 +214,14 @@ namespace WebApi.Providers
 		public string GetLog()
 		{
 			return logBuilder.ToString().Replace(Environment.NewLine,"|");
+		}
+
+		public void ExecuteCommand(int pointId,int address, int value)
+		{
+			if (pointsCache.TryGetValue(pointId, out IPoint point))
+			{
+				processingManager.ExecuteWriteCommand(point.ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
+			}
 		}
 	}
 }

@@ -32,7 +32,7 @@
           <td>{{item.rawValue}}</td>
           <td>{{item.timestamp | timestampPipe}}</td>
           <td>{{item.alarm | alarmPipe}}</td>
-          <td><button class="btn btn-success">Command</button></td>
+          <td><button [disabled]="isInput(item)" class="btn btn-success" (click) = "onCommandPreview(item)" data-toggle="modal" data-target="#commandModal">Command</button></td>
         </tr>
       </tbody>
     </table>
@@ -57,6 +57,60 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="commandModal" tabindex="-1" role="dialog" aria-labelledby="CommandModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="CommandModal">Command</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <app-spiner *ngIf="selectedPoint === null || selectedPoint === undefined"></app-spiner>
+      <div *ngIf="selectedPoint !== null || selectedPoint !== undefined">
+        <form *ngIf="selectedPoint?.configItem.processingType === 'DO'" [formGroup]="commandModel" autocomplete="off">
+          <div class="form-group">
+            <label for="currentValue">Current Value:</label>
+            <input id="currentValue" disabled name="currentValue" formControlName="CurrentValue" type="number" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="abnValue">Abnormal Value:</label>
+            <input id="abnValue" disabled name="abnValue" formControlName="AbnormalValue" type="number" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="value">Value</label>
+            <input id="value" name="value" formControlName="Value" type="number" step="1" min="0" max="1" class="form-control" placeholder="Value">
+            <label *ngIf="commandModel.get('Value').touched && commandModel.get('Value').errors?.value" for="value" class="text-danger">Value is outside of limits</label>
+          </div>
+        </form>
+        <form *ngIf="selectedPoint?.configItem.processingType === 'AO'" [formGroup]="commandModel" autocomplete="off">
+          <div class="form-group">
+            <label for="currentValue">Current Value:</label>
+            <input id="currentValue" disabled name="currentValue" formControlName="CurrentValue" type="number" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="highLimit">High Limit:</label>
+            <input id="highLimit" disabled name="highLimit" formControlName="HighLimit" type="number" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="lowLimit">Low Limit:</label>
+            <input id="lowLimit" disabled name="lowLimit" formControlName="LowLimit" type="number" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="value">Value</label>
+            <input id="value" name="value" formControlName="Value" type="number" step="1" min="0" class="form-control" placeholder="Value">
+            <label *ngIf="commandModel.get('Value').touched && commandModel.get('Value').errors?.value" for="value" class="text-danger">Value is outside of limits</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" [disabled]="!isValidCommand()" (click) = "onCommand()" data-dismiss="modal">Command</button>
+        <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

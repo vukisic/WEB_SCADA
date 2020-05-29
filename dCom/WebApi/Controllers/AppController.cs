@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using WebApi.Hubs;
+using WebApi.Models;
 using WebApi.Providers;
 
 namespace WebApi.Controllers
@@ -37,5 +38,15 @@ namespace WebApi.Controllers
         {
             return Ok(new { log = DComCoreSingleton.GetSingleton().GetLog() });
         }
+
+        [HttpPost]
+        [Route("Command")]
+        public IActionResult ExecuteCommand(CommandRequest model)
+        {
+            DComCoreSingleton.GetSingleton().ExecuteCommand(model.PointId, model.Address, model.Value);
+            return Ok();
+        }
+
+
     }
 }
