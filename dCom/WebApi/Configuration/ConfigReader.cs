@@ -1,5 +1,4 @@
 ﻿using Common;
-using dCom.Exceptions;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;

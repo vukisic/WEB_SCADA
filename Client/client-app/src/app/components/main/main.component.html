@@ -19,7 +19,8 @@
           <th>Value</th>
           <th>Raw Value</th>
           <th>Timestamp</th>
-          <th>Alarm</th>
+          <th colspan="2">Alarm</th>
+          <th>Read</th>
           <th>Command</th>
         </tr>
       </thead>
@@ -31,8 +32,9 @@
           <td>{{item.displayValue}}</td>
           <td>{{item.rawValue}}</td>
           <td>{{item.timestamp | timestampPipe}}</td>
-          <td>{{item.alarm | alarmPipe}}</td>
-          <td><button [disabled]="isInput(item)" class="btn btn-success" (click) = "onCommandPreview(item)" data-toggle="modal" data-target="#commandModal">Command</button></td>
+          <td colspan="2">{{item.alarm | alarmPipe}}</td>
+          <td><button class="btn btn-sm btn-warning" (click) = "onRead(item)">Read</button></td>
+          <td><button [disabled]="isInput(item)" class="btn btn-sm btn-success" (click) = "onCommandPreview(item)" data-toggle="modal" data-target="#commandModal">Command</button></td>
         </tr>
       </tbody>
     </table>

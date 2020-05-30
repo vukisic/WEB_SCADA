@@ -37,6 +37,7 @@ namespace WebApi
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime appLife)
         {
             appLife.ApplicationStopping.Register(OnStop);
+            appLife.ApplicationStopped.Register(OnStop);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

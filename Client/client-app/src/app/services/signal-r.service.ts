@@ -3,8 +3,7 @@ import * as signalR from '@aspnet/signalr';
 import { environment } from 'src/environments/environment';
 import { ResponseModel } from '../models/ResponseModel';
 import { BehaviorSubject } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { RequestModel } from '../models/RequestModel';
+import { HttpClient} from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })

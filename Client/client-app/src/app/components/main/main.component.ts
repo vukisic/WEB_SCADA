@@ -41,6 +41,17 @@ export class MainComponent implements OnInit {
   showData(data: ResponseModel) {
     if (data !== null && data !== undefined) {
       this.data = data;
+      if (this.selectedPoint !== undefined) {
+        data.list.forEach(x => {
+          if (x.pointId === this.selectedPoint.pointId) {
+            if (x.type === PointType.ANALOG_OUTPUT){
+              this.commandModel.patchValue({CurrentValue: x.eguValue});
+            } else {
+              this.commandModel.patchValue({CurrentValue: x.rawValue});
+            }
+          }
+        });
+      }
     }
   }
 
@@ -111,9 +122,10 @@ export class MainComponent implements OnInit {
         const address = this.selectedPoint.address;
         const value = this.commandModel.get('Value').value;
         this.signalRService.hubConnection.invoke('command', {pointId, address, value}).then(() => {
-
+          this.selectedPoint = undefined;
+          this.commandModel.reset();
         }).catch(() => {
-
+          this.toastrService.error('Error occures  while execting command!', 'Client');
         });
       } else {
         this.toastrService.error('Command is not valid!', 'Client');
@@ -121,5 +133,29 @@ export class MainComponent implements OnInit {
     } else {
       this.toastrService.error('Disconnected!', 'Client');
     }
+  }
+
+  onRead(item: Point) {
+    this.signalRService.hubConnection.invoke('single', item.pointId).then(point => {
+      if (point !== null && point !== undefined){
+        this.updatePoint(point);
+        this.toastrService.info(`Point ${item.name} on address ${item.address} has a value ${point.displayValue}`, 'Client');
+      }
+    }).catch(() => {
+      this.toastrService.error('Error occured while reading the value', 'Client');
+    });
+  }
+
+  updatePoint(item: Point){
+    this.data.list.forEach(x=>{
+      if (x.pointId === item.pointId) {
+        x.alarm = item.alarm;
+        x.commandedValue = item.commandedValue;
+        x.displayValue = item.displayValue;
+        x.eguValue = item.eguValue;
+        x.rawValue = item.rawValue;
+        x.timestamp = item.timestamp;
+      }
+    });
   }
 }
