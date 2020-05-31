@@ -3,6 +3,9 @@ using System;
 
 namespace WebApi.Providers
 {
+	/// <summary>
+	/// Analog Output Model
+	/// </summary>
 	internal class AnalogOutput : AnalogBase
 	{
 

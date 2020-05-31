@@ -1,6 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { PointType } from '../models/Enums';
 
+
+/*
+  Pipe that converts integer value of PointType Enum from server to string
+  Input:
+        - value to convert
+  Output:
+         - converted value (string)
+*/
 @Pipe({name: 'typePipe'})
 export class TypePipe implements PipeTransform {
   transform(type: PointType): string {

@@ -1,6 +1,10 @@
 import { AlarmType, PointType } from './Enums';
 import { ConfigItem } from './ConfigItem';
 
+
+/*
+  Interface that represents Point
+*/
 export interface Point {
   address: number;
   alarm: AlarmType;

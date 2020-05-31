@@ -5,9 +5,13 @@ using System.Windows.Threading;
 
 namespace WebApi.Providers
 {
+	/// <summary>
+	/// Base for all other types of points
+	/// </summary>
 	public abstract class BasePointItem : IDataErrorInfo
 	{
-		protected PointType type;
+        #region Fields
+        protected PointType type;
 		protected ushort address;
 		private DateTime timestamp = DateTime.Now;
 		private string name = string.Empty;
@@ -24,8 +28,8 @@ namespace WebApi.Providers
 		protected IConfigItem configItem;
 
 		int pointId;
-
-		public BasePointItem(IConfigItem c, IProcessingManager processingManager, IStateUpdater stateUpdater, IConfiguration configuration, int i)
+        #endregion 
+        public BasePointItem(IConfigItem c, IProcessingManager processingManager, IStateUpdater stateUpdater, IConfiguration configuration, int i)
 		{
 			this.configItem = c;
 			this.processingManager = processingManager;

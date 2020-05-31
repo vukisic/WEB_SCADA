@@ -59,7 +59,9 @@ namespace ProcessingModule
 			automationWorker.Start();
 		}
 
-
+		/// <summary>
+		/// Defines custom work for automation
+		/// </summary>
 		private void AutomationWorker_DoWork()
 		{
 			

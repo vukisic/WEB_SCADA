@@ -1,3 +1,4 @@
+<!-- Connection Status -->
 <div class="row">
   <div class="offset-md-5 col-md-4 mt-3">
     <i *ngIf="!status()" class="fas fa-circle text-center red">&nbsp;&nbsp;DISCONNECTED</i>
@@ -5,7 +6,9 @@
   </div>
 </div>
 <hr>
+<!-- Loading animation -->
 <app-spiner *ngIf="data === null || data === undefined"></app-spiner>
+<!-- Data table -->
 <div *ngIf="data !== null && data !== undefined" class="row">
   <div class="offset-md-1 col-md-10">
     <button class="btn btn-lg btn-success mt-3 mb-3" type="button" id="logs" (click)="onLogsClick()" data-toggle="modal" data-target="#logModal">Log</button>
@@ -42,6 +45,8 @@
 </div>
 
 <!--Modal Dialogs-->
+
+<!-- Log Modal Dialog -->
 <div class="modal fade" id="logModal" tabindex="-1" role="dialog" aria-labelledby="logModal" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -64,6 +69,7 @@
   </div>
 </div>
 
+<!-- Command Modal Dialog -->
 <div class="modal fade" id="commandModal" tabindex="-1" role="dialog" aria-labelledby="CommandModal" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

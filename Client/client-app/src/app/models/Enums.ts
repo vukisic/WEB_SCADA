@@ -1,3 +1,7 @@
+
+/*
+  AlarmType enumeration
+*/
 export enum AlarmType {
   NO_ALARM = 0x01,
 	REASONABILITY_FAILURE = 0x02,
@@ -6,6 +10,9 @@ export enum AlarmType {
   ABNORMAL_VALUE = 0x05
 }
 
+/*
+  PointType enumeration
+*/
 export enum PointType {
   DIGITAL_OUTPUT = 0x01,
 	DIGITAL_INPUT = 0x02,

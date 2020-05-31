@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+/*
+  App Spiner - Loading Animation
+*/
 @Component({
   selector: 'app-spiner',
   templateUrl: './spiner.component.html',

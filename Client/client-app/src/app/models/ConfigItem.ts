@@ -1,3 +1,7 @@
+
+/*
+  Class that represent Configuration item
+*/
 export class ConfigItem {
   abnormalValue: number;
   acquisitionInterval: number;

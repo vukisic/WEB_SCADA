@@ -16,10 +16,8 @@ namespace WebApi.Providers
 {
 	public class DComCore : IDisposable, IStateUpdater, IStorage
 	{
-		public ObservableCollection<BasePointItem> Points { get; set; }
-
 		#region Fields
-
+		public ObservableCollection<BasePointItem> Points { get; set; }
 		private object lockObject = new object();
 		private Thread timerWorker;
 		private ConnectionState connectionState;
@@ -34,9 +32,9 @@ namespace WebApi.Providers
 		private bool disposed = false;
 		IConfiguration configuration;
 		private IProcessingManager processingManager = null;
-		#endregion Fields
+		
 		Dictionary<int, IPoint> pointsCache = new Dictionary<int, IPoint>();
-
+		#endregion Fields
 		#region Properties
 
 		public ConnectionState ConnectionState
@@ -91,7 +89,9 @@ namespace WebApi.Providers
 		}
 
 		#region Private methods
-
+		/// <summary>
+		/// Initializes collection of Points
+		/// </summary>
 		private void InitializePointCollection()
 		{
 			Points = new ObservableCollection<BasePointItem>();
@@ -110,6 +110,13 @@ namespace WebApi.Providers
 			}
 		}
 
+		/// <summary>
+		/// Creates Point
+		/// </summary>
+		/// <param name="c">ConfigItem</param>
+		/// <param name="i">Register number</param>
+		/// <param name="processingManager">Processing manager instance</param>
+		/// <returns>Created Point</returns>
 		private BasePointItem CreatePoint(IConfigItem c, int i, IProcessingManager processingManager)
 		{
 			switch (c.RegistryType)
@@ -131,23 +138,36 @@ namespace WebApi.Providers
 			}
 		}
 
+		/// <summary>
+		/// Initialization and start for all threads
+		/// </summary>
 		private void InitializeAndStartThreads()
 		{
 			InitializeTimerThread();
 			StartTimerThread();
 		}
 
+		/// <summary>
+		/// Initialization of timer thread
+		/// </summary>
 		private void InitializeTimerThread()
 		{
 			timerWorker = new Thread(TimerWorker_DoWork);
 			timerWorker.Name = "Timer Thread";
 		}
 
+
+		/// <summary>
+		/// Starts timer thread
+		/// </summary>
 		private void StartTimerThread()
 		{
 			timerWorker.Start();
 		}
 
+		/// <summary>
+		/// Defines work of timer thread
+		/// </summary>
 		private void TimerWorker_DoWork()
 		{
 			while (timerThreadStopSignal)
@@ -165,11 +185,19 @@ namespace WebApi.Providers
 
 		#region IStateUpdater implementation
 
+		/// <summary>
+		/// Upadates connection state
+		/// </summary>
+		/// <param name="currentConnectionState">New connection state</param>
 		public void UpdateConnectionState(ConnectionState currentConnectionState)
 		{
 			ConnectionState = currentConnectionState;
 		}
 
+		/// <summary>
+		/// Logs message
+		/// </summary>
+		/// <param name="message">Message to be logged</param>
 		public void LogMessage(string message)
 		{
 			if (disposed)
@@ -185,6 +213,9 @@ namespace WebApi.Providers
 
 		#endregion IStateUpdater implementation
 
+		/// <summary>
+		/// IDisposable implementation
+		/// </summary>
 		public void Dispose()
 		{
 			disposed = true;
@@ -196,6 +227,11 @@ namespace WebApi.Providers
 			automationTrigger.Dispose();
 		}
 
+		/// <summary>
+		/// Returns points for specifies identifiers
+		/// </summary>
+		/// <param name="pointIds">List of identifiers</param>
+		/// <returns>List of points</returns>
 		public List<IPoint> GetPoints(List<PointIdentifier> pointIds)
 		{
 			List<IPoint> retVal = new List<IPoint>(pointIds.Count);
@@ -211,11 +247,21 @@ namespace WebApi.Providers
 			return retVal;
 		}
 
+		/// <summary>
+		/// Returns Log data
+		/// </summary>
+		/// <returns>Log Data</returns>
 		public string GetLog()
 		{
 			return logBuilder.ToString().Replace(Environment.NewLine,"|");
 		}
 
+		/// <summary>
+		/// Executes command for specified data
+		/// </summary>
+		/// <param name="pointId">Id of Point</param>
+		/// <param name="address">Address of Point</param>
+		/// <param name="value">Commanded Value</param>
 		public void ExecuteCommand(int pointId,int address, int value)
 		{
 			if (pointsCache.TryGetValue(pointId, out IPoint point))

@@ -9,7 +9,8 @@ namespace WebApi.Configuration
 {
     internal class ConfigReader : IConfiguration
 	{
-		private ushort transactionId = 0;
+        #region Fields
+        private ushort transactionId = 0;
 
 		private byte unitAddress;
 		private int tcpPort;
@@ -19,7 +20,8 @@ namespace WebApi.Configuration
 
 		private string path = "RtuCfg.txt";
 
-		public ConfigReader()
+        #endregion
+        public ConfigReader()
 		{
 			if (!File.Exists(path))
 			{
@@ -29,6 +31,11 @@ namespace WebApi.Configuration
 			ReadConfiguration();
 		}
 
+		/// <summary>
+		/// Gets aquisition interval for specified point description
+		/// </summary>
+		/// <param name="pointDescription">Requested point description</param>
+		/// <returns>Acquisition interval</returns>
 		public int GetAcquisitionInterval(string pointDescription)
 		{
 			IConfigItem ci;
@@ -39,6 +46,11 @@ namespace WebApi.Configuration
 			throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointDescription)));
 		}
 
+		/// <summary>
+		/// Returns start address for specified point description
+		/// </summary>
+		/// <param name="pointDescription">Requested point description</param>
+		/// <returns>Start address</returns>
 		public ushort GetStartAddress(string pointDescription)
 		{
 			IConfigItem ci;
@@ -49,6 +61,11 @@ namespace WebApi.Configuration
 			throw new ArgumentException(string.Format("Invalid argument:{0}", nameof(pointDescription)));
 		}
 
+		/// <summary>
+		///	Gets number of registers for specific point description
+		/// </summary>
+		/// <param name="pointDescription"></param>
+		/// <returns>Number of registers</returns>
 		public ushort GetNumberOfRegisters(string pointDescription)
 		{
 			IConfigItem ci;
@@ -60,7 +77,9 @@ namespace WebApi.Configuration
 		}
 
 		
-
+		/// <summary>
+		/// Reads configuration file
+		/// </summary>
 		private void ReadConfiguration()
 		{
 			using (TextReader tr = new StreamReader(path))
@@ -124,12 +143,17 @@ namespace WebApi.Configuration
 			}
 		}
 
+		/// <summary>
+		/// Returns transcation id
+		/// </summary>
+		/// <returns>Transaction Id</returns>
 		public ushort GetTransactionId()
 		{
 			return transactionId++;
 		}
 
-		public byte UnitAddress
+        #region Properties
+        public byte UnitAddress
 		{
 			get
 			{
@@ -168,6 +192,12 @@ namespace WebApi.Configuration
 			}
 		}
 
+		#endregion
+
+		/// <summary>
+		/// Returns list of configuration items
+		/// </summary>
+		/// <returns>List of configuration items</returns>
 		public List<IConfigItem> GetConfigurationItems()
 		{
 			return new List<IConfigItem>(pointTypeToConfiguration.Values);

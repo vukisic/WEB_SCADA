@@ -44,7 +44,6 @@ namespace WebApi
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -59,6 +58,7 @@ namespace WebApi
             app.UseMvc();
         }
 
+        // Dispose DComCore on the end of Application lifetime
         private void OnStop()
         {
             DComCoreSingleton.GetSingleton().Dispose();

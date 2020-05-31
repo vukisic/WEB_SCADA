@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { ResponseModel } from 'src/app/models/ResponseModel';
 import { SignalRService } from 'src/app/services/signal-r.service';
 import { Point } from 'src/app/models/Point';
@@ -8,6 +7,9 @@ import { PointType } from 'src/app/models/Enums';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 
+/*
+  Main App Component - Client
+*/
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -15,14 +17,17 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class MainComponent implements OnInit {
 
+  /// Response from server
   data: ResponseModel;
   log: string[] = [];
+  /// Selected point
   selectedPoint: Point;
   constructor(public signalRService: SignalRService,
               private fb: FormBuilder,
               private http: HttpClient,
               private toastrService: ToastrService) { }
 
+  /// Model for command form
   commandModel = this.fb.group({
     Value: [0],
     CurrentValue: [0],
@@ -32,19 +37,25 @@ export class MainComponent implements OnInit {
   });
 
   ngOnInit() {
+    /// Register on server hub
     this.signalRService.startConnection();
+    /// Add data listener
     this.signalRService.addDataListener();
+    /// Send init request
     this.signalRService.startHttpRequest();
-    this.signalRService.navItem$.subscribe(data => this.showData(data));
+    /// Subscribe on data changes
+    this.signalRService.dataSource$.subscribe(data => this.showData(data));
   }
 
+  /// Function witch checks if data is valid and update selected point if exists
+  /// Input: data eg. response form server;
   showData(data: ResponseModel) {
     if (data !== null && data !== undefined) {
       this.data = data;
       if (this.selectedPoint !== undefined) {
         data.list.forEach(x => {
           if (x.pointId === this.selectedPoint.pointId) {
-            if (x.type === PointType.ANALOG_OUTPUT){
+            if (x.type === PointType.ANALOG_OUTPUT) {
               this.commandModel.patchValue({CurrentValue: x.eguValue});
             } else {
               this.commandModel.patchValue({CurrentValue: x.rawValue});
@@ -55,6 +66,7 @@ export class MainComponent implements OnInit {
     }
   }
 
+  /// Function witch checks and updates status of connection
   status() {
     if (this.data === null || this.data === undefined) {
       return false;
@@ -65,6 +77,8 @@ export class MainComponent implements OnInit {
     }
   }
 
+  /// Functions that handle click on Log button
+  /// Requests log data from server
   onLogsClick() {
     this.signalRService.hubConnection.invoke('logs').then(data => {
       this.log = data.split('|').reverse();
@@ -74,10 +88,15 @@ export class MainComponent implements OnInit {
     });
   }
 
+  /// Function that checks if point is an input
+  /// Input: point to be checkd
+  /// Output: bool value
   isInput(model: Point) {
     return model.type === PointType.ANALOG_INPUT || model.type === PointType.DIGITAL_INPUT;
   }
 
+  /// Function that handle click on command button and configure dialog based on point type
+  /// Input: Point that was clicked
   onCommandPreview(item: Point) {
     this.selectedPoint = item;
     if (this.selectedPoint.type === PointType.ANALOG_OUTPUT) {
@@ -99,6 +118,7 @@ export class MainComponent implements OnInit {
     }
   }
 
+  /// Function that checks if command is valid eg. is commanded value in alarm scope
   isValidCommand() {
     if (this.selectedPoint !== undefined && this.selectedPoint.type === PointType.ANALOG_OUTPUT) {
       const commandValue = this.commandModel.get('Value').value;
@@ -115,6 +135,8 @@ export class MainComponent implements OnInit {
     }
   }
 
+  /// Function that sends command to server for execution, via hub connection
+  /// Handle click of command button in command dialog
   onCommand() {
     if (this.status()) {
       if (this.isValidCommand()) {
@@ -135,9 +157,12 @@ export class MainComponent implements OnInit {
     }
   }
 
+  /// Function that sends read request to server, via hub connection
+  /// Handle click of command button in command dialog
+  /// Input: point witch value has to be readed
   onRead(item: Point) {
     this.signalRService.hubConnection.invoke('single', item.pointId).then(point => {
-      if (point !== null && point !== undefined){
+      if (point !== null && point !== undefined) {
         this.updatePoint(point);
         this.toastrService.info(`Point ${item.name} on address ${item.address} has a value ${point.displayValue}`, 'Client');
       }
@@ -146,8 +171,10 @@ export class MainComponent implements OnInit {
     });
   }
 
-  updatePoint(item: Point){
-    this.data.list.forEach(x=>{
+  /// Function that update point, when response for read request arrived
+  /// Input: point with readed value
+  updatePoint(item: Point) {
+    this.data.list.forEach(x => {
       if (x.pointId === item.pointId) {
         x.alarm = item.alarm;
         x.commandedValue = item.commandedValue;

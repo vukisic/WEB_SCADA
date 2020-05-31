@@ -2,16 +2,21 @@
 
 namespace WebApi.Providers
 {
+	/// <summary>
+	/// Analog Base Model
+	/// </summary>
     public abstract class AnalogBase : BasePointItem, IAnalogPoint 
 	{
-		private double eguValue;
-
-		public AnalogBase(IConfigItem c, IProcessingManager processingManager, IStateUpdater stateUpdater, IConfiguration configuration, int i)
+        #region Fields
+        private double eguValue;
+        #endregion
+        public AnalogBase(IConfigItem c, IProcessingManager processingManager, IStateUpdater stateUpdater, IConfiguration configuration, int i)
 			: base(c, processingManager, stateUpdater, configuration, i)
 		{
 		}
 
-		public double EguValue
+        #region Properties
+        public double EguValue
 		{
 			get
 			{
@@ -31,5 +36,6 @@ namespace WebApi.Providers
 				return EguValue.ToString();
 			}
 		}
-	}
+        #endregion
+    }
 }

@@ -1,6 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { PointType } from '../models/Enums';
 
+
+/*
+  Pipe that converts UTC based timestamp into local base timestamp
+  Input:
+        - value to convert
+  Output:
+         - converted value (string)
+*/
 @Pipe({name: 'timestampPipe'})
 export class TimestampPipe implements PipeTransform {
   transform(value: string): string {

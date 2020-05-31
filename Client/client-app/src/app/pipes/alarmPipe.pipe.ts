@@ -1,6 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { PointType, AlarmType } from '../models/Enums';
 
+/*
+  Pipe that converts integer value of AlarmType Enum from server to string
+  Input:
+        - value to convert
+  Output:
+         - converted value (string)
+*/
 @Pipe({name: 'alarmPipe'})
 export class AlarmPipe implements PipeTransform {
   transform(type: AlarmType): string {

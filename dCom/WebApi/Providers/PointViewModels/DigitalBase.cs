@@ -2,16 +2,21 @@
 
 namespace WebApi.Providers
 {
-    internal abstract class DigitalBase : BasePointItem, IDigitalPoint
+	/// <summary>
+	/// Digital Base Model
+	/// </summary>
+	internal abstract class DigitalBase : BasePointItem, IDigitalPoint
     {
-		private DState state;
-
-		public DigitalBase(IConfigItem c, IProcessingManager processingManager, IStateUpdater stateUpdater, IConfiguration configuration, int i)
+        #region Fields
+        private DState state;
+        #endregion
+        public DigitalBase(IConfigItem c, IProcessingManager processingManager, IStateUpdater stateUpdater, IConfiguration configuration, int i)
 			: base(c, processingManager, stateUpdater, configuration, i)
 		{
 		}
 
-		public DState State
+        #region Properties
+        public DState State
 		{
 			get
 			{
@@ -31,5 +36,6 @@ namespace WebApi.Providers
 				return State.ToString();
 			}
 		}
-	}
+        #endregion
+    }
 }

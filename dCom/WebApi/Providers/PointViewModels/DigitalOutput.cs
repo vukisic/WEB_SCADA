@@ -3,6 +3,9 @@ using System;
 
 namespace WebApi.Providers
 {
+	/// <summary>
+	/// Digital Output Model
+	/// </summary>
     internal class DigitalOutput : DigitalBase
 	{
 
