@@ -8,10 +8,5 @@ namespace WebApi.Providers
 			: base(c, processingManager, stateUpdater, configuration, i)
 		{
 		}
-
-		protected override void WriteCommand_Execute(object obj)
-		{
-			// Write command is not applicable for input points.
-		}
 	}
 }

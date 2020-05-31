@@ -9,9 +9,5 @@ namespace WebApi.Providers
 		{
 		}
 
-        protected override void WriteCommand_Execute(object obj)
-        {
-            // Write command is not applicable for input points.
-        }
     }
 }

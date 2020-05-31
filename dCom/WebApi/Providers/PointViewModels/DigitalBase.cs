@@ -31,10 +31,5 @@ namespace WebApi.Providers
 				return State.ToString();
 			}
 		}
-
-		protected override bool WriteCommand_CanExecute(object obj)
-		{
-			return false;
-		}
 	}
 }

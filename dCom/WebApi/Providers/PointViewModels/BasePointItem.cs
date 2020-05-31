@@ -2,7 +2,6 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Threading;
-using WebApi.Utils;
 
 namespace WebApi.Providers
 {
@@ -25,17 +24,6 @@ namespace WebApi.Providers
 		protected IConfigItem configItem;
 
 		int pointId;
-		/// <summary>
-		/// Command that is executed when write button is clicked on control window;
-		/// Command should create write command parameters and provide it to FunctionFactory
-		/// </summary>
-		public RelayCommand WriteCommand { get; set; }
-
-		/// <summary>
-		/// Command that is executed when read button is clicked on control window;
-		/// Command should create read command parameters and provide it to FunctionFactory
-		/// </summary>
-		public RelayCommand ReadCommand { get; set; }
 
 		public BasePointItem(IConfigItem c, IProcessingManager processingManager, IStateUpdater stateUpdater, IConfiguration configuration, int i)
 		{
@@ -49,36 +37,6 @@ namespace WebApi.Providers
 			this.name = $"{configItem.Description} [{i}]";
 			this.rawValue = configItem.DefaultValue;
 			this.pointId = PointIdentifierHelper.GetNewPointId(new PointIdentifier(this.type, this.address));
-
-			WriteCommand = new RelayCommand(WriteCommand_Execute, WriteCommand_CanExecute);
-			ReadCommand = new RelayCommand(ReadCommand_Execute);
-		}
-
-		protected abstract bool WriteCommand_CanExecute(object obj);
-
-		/// <summary>
-		/// Method that is executed when write button is clicked on control window;
-		/// Method should create write command parameters and provide it to FunctionFactory
-		/// </summary>
-		/// <param name="obj">Not used</param>
-		protected abstract void WriteCommand_Execute(object obj);
-
-		/// <summary>
-		/// Method that is executed when read button is clicked on control window;
-		/// Method should create read command parameters and provide it to FunctionFactory
-		/// </summary>
-		/// <param name="obj">Not used</param>
-		private void ReadCommand_Execute(object obj)
-		{
-			try
-			{
-				this.processingManager.ExecuteReadCommand(configItem, configuration.GetTransactionId(), configuration.UnitAddress, address, 1);
-			}
-			catch (Exception ex)
-			{
-				string message = $"{ex.TargetSite.ReflectedType.Name}.{ex.TargetSite.Name}: {ex.Message}";
-				this.stateUpdater.LogMessage(message);
-			}
 		}
 
 		#region Properties

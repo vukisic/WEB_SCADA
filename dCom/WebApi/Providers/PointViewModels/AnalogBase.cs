@@ -31,10 +31,5 @@ namespace WebApi.Providers
 				return EguValue.ToString();
 			}
 		}
-
-		protected override bool WriteCommand_CanExecute(object obj)
-		{
-			return false;
-		}
 	}
 }
