@@ -1,8 +1,11 @@
 <!-- Connection Status -->
 <div class="row">
   <div class="offset-md-5 col-md-4 mt-3">
-    <i *ngIf="!status()" class="fas fa-circle text-center red">&nbsp;&nbsp;DISCONNECTED</i>
-    <i *ngIf="status()" class="fas fa-circle text-center green">&nbsp;&nbsp;CONNECTED</i>
+    <!-- Connection Status -->
+    <i *ngIf="!status()" class="fas fa-circle text-center red blink"></i>
+    <span *ngIf="!status()" class="red">&nbsp;&nbsp;DISSCONECTED</span>
+    <i *ngIf="status()" class="fas fa-circle text-center green blink"></i>
+    <span *ngIf="status()" class="green">&nbsp;&nbsp;CONNECTED</span>
   </div>
 </div>
 <hr>
@@ -23,7 +26,6 @@
           <th>Raw Value</th>
           <th>Timestamp</th>
           <th colspan="2">Alarm</th>
-          <th>Read</th>
           <th>Command</th>
         </tr>
       </thead>
@@ -36,7 +38,6 @@
           <td>{{item.rawValue}}</td>
           <td>{{item.timestamp | timestampPipe}}</td>
           <td colspan="2">{{item.alarm | alarmPipe}}</td>
-          <td><button class="btn btn-sm btn-warning" (click) = "onRead(item)">Read</button></td>
           <td><button [disabled]="isInput(item)" class="btn btn-sm btn-success" (click) = "onCommandPreview(item)" data-toggle="modal" data-target="#commandModal">Command</button></td>
         </tr>
       </tbody>

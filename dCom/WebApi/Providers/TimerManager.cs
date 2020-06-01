@@ -18,11 +18,11 @@ namespace WebApi.Providers
         #region Properties
         public DateTime TimerStarted { get; }
         #endregion
-        public TimerManager(Action action)
+        public TimerManager(Action action, int dbc = 2)
         {
             this.action = action;
             autoResetEvent = new AutoResetEvent(false);
-            timer = new Timer(Execute, autoResetEvent, 1000, 2000);
+            timer = new Timer(Execute, autoResetEvent, 1000, dbc*1000);
             TimerStarted = DateTime.Now;
         }
 

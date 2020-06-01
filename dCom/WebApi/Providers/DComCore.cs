@@ -269,5 +269,14 @@ namespace WebApi.Providers
 				processingManager.ExecuteWriteCommand(point.ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress, (ushort)address, value);
 			}
 		}
+
+		/// <summary>
+		/// Returns value of delay between commands from configuration
+		/// </summary>
+		/// <returns>Value of DBC</returns>
+		public int GetDelayBetweenCommands()
+		{
+			return this.configuration.DelayBetweenCommands;
+		}
 	}
 }

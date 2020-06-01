@@ -31,13 +31,14 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            var dbc = DComCoreSingleton.GetSingleton().GetDelayBetweenCommands();
             var timerManager = new TimerManager(
                 () => hub.Clients.All.SendAsync("recieveMsg", new 
                 { 
                     status = DComCoreSingleton.GetSingleton().ConnectionState, 
                     list = DComCoreSingleton.GetSingleton().Points.ToList() 
                 })
-            );
+            , dbc);
             return Ok(new { Message = "Request Completed" });
         }
 

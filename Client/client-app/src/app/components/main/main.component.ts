@@ -146,6 +146,7 @@ export class MainComponent implements OnInit {
         this.signalRService.hubConnection.invoke('command', {pointId, address, value}).then(() => {
           this.selectedPoint = undefined;
           this.commandModel.reset();
+          this.toastrService.success('Succesfully executed command!', 'Client');
         }).catch(() => {
           this.toastrService.error('Error occures  while execting command!', 'Client');
         });
@@ -155,34 +156,5 @@ export class MainComponent implements OnInit {
     } else {
       this.toastrService.error('Disconnected!', 'Client');
     }
-  }
-
-  /// Function that sends read request to server, via hub connection
-  /// Handle click of command button in command dialog
-  /// Input: point witch value has to be readed
-  onRead(item: Point) {
-    this.signalRService.hubConnection.invoke('single', item.pointId).then(point => {
-      if (point !== null && point !== undefined) {
-        this.updatePoint(point);
-        this.toastrService.info(`Point ${item.name} on address ${item.address} has a value ${point.displayValue}`, 'Client');
-      }
-    }).catch(() => {
-      this.toastrService.error('Error occured while reading the value', 'Client');
-    });
-  }
-
-  /// Function that update point, when response for read request arrived
-  /// Input: point with readed value
-  updatePoint(item: Point) {
-    this.data.list.forEach(x => {
-      if (x.pointId === item.pointId) {
-        x.alarm = item.alarm;
-        x.commandedValue = item.commandedValue;
-        x.displayValue = item.displayValue;
-        x.eguValue = item.eguValue;
-        x.rawValue = item.rawValue;
-        x.timestamp = item.timestamp;
-      }
-    });
   }
 }

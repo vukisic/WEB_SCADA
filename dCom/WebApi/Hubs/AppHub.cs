@@ -32,19 +32,5 @@ namespace WebApi.Hubs
         {
             return DComCoreSingleton.GetSingleton().GetLog();
         }
-
-        /// <summary>
-        /// (SignalR - HTTP POST)
-        /// Metod that handles request for reading data througt client hub connection
-        /// </summary>
-        /// <param name="pointId">Id of point to be readed</param>
-        /// <returns>Point if exists</returns>
-        public BasePointItem Single(int pointId)
-        {
-            BasePointItem item = DComCoreSingleton.GetSingleton().Points.SingleOrDefault(x => x.PointId == pointId);
-            if (item != null)
-                return item;
-            return null;
-        }
     }
 }
