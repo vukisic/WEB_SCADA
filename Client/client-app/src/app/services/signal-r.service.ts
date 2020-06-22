@@ -54,6 +54,8 @@ export class SignalRService {
       });
   }
 
+
+
   /// Functions that sends get request, requesting log data from server
   public getLogs = () => {
     return this.http.get(`https://localhost:${environment.port}/api/app/logs`);

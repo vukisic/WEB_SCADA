@@ -62,7 +62,11 @@ namespace ProcessingModule
                 {
                     if (item.SecondsPassedSinceLastPoll == item.AcquisitionInterval)
                     {
-                        processingManager.ExecuteReadCommand(item, configuration.GetTransactionId(), configuration.UnitAddress, item.StartAddress, item.NumberOfRegisters);
+                        processingManager.ExecuteReadCommand(item, 
+                            configuration.GetTransactionId(), 
+                            configuration.UnitAddress, 
+                            item.StartAddress, 
+                            item.NumberOfRegisters);
                         item.SecondsPassedSinceLastPoll = 0;
                     }
                     item.SecondsPassedSinceLastPoll++;

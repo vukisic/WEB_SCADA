@@ -52,10 +52,17 @@ namespace WebApi.Providers
 					if(automationManager == null)
 						automationManager = new AutomationManager(this, processingManager, automationTrigger, configuration);
 					automationManager.Start(configuration.DelayBetweenCommands);
+					automationTrigger.Set();
 				}
 				else
 				{
-					automationManager.Stop();
+					try
+					{
+						automationManager.Stop();
+						automationTrigger.Set();
+					}
+					catch { }
+					
 				}
 			}
 		}
@@ -221,10 +228,13 @@ namespace WebApi.Providers
 			disposed = true;
 			timerThreadStopSignal = false;
 			(commandExecutor as IDisposable).Dispose();
-			this.acquisitor.Dispose();
+			acquisitor.Dispose();
 			acquisitionTrigger.Dispose();
+			acquisitionTrigger.Close();
 			automationManager.Stop();
 			automationTrigger.Dispose();
+			automationTrigger.Close();
+			Points.Clear();
 		}
 
 		/// <summary>

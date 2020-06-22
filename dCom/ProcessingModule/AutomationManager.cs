@@ -56,7 +56,12 @@ namespace ProcessingModule
 		/// </summary>
 		private void StartAutomationWorkerThread()
 		{
+			if (automationWorker != null)
+				automationWorker.Abort();
+			automationWorker = new Thread(AutomationWorker_DoWork);
+			automationWorker.Name = "Aumation Thread";
 			automationWorker.Start();
+			disposedValue = false;
 		}
 
 		/// <summary>
@@ -64,7 +69,64 @@ namespace ProcessingModule
 		/// </summary>
 		private void AutomationWorker_DoWork()
 		{
-			
+			int counter = 0;
+			List<IPoint> points;
+			List<PointIdentifier> pointIdentifiers = new List<PointIdentifier>()
+			{
+				new PointIdentifier(PointType.DIGITAL_OUTPUT, 40),
+				new PointIdentifier(PointType.DIGITAL_OUTPUT, 41),
+				new PointIdentifier(PointType.DIGITAL_INPUT, 1000),
+				new PointIdentifier(PointType.DIGITAL_INPUT, 1001),
+				new PointIdentifier(PointType.ANALOG_INPUT, 2000),
+				new PointIdentifier(PointType.ANALOG_INPUT, 2001),
+				new PointIdentifier(PointType.ANALOG_OUTPUT, 3000),
+				new PointIdentifier(PointType.ANALOG_OUTPUT, 3001),
+
+			};
+			while (!disposedValue)
+			{
+				if (counter == configuration.DelayBetweenCommands)
+				{
+					points = storage.GetPoints(pointIdentifiers);
+
+					int DO1 = ((IDigitalPoint)points[0]).RawValue;
+					int DO2 = ((IDigitalPoint)points[1]).RawValue;
+					double AO1 = ((IAnalogPoint)points[6]).EguValue;
+					double AO2 = ((IAnalogPoint)points[7]).EguValue;
+
+					if (DO1 == 0)
+					{
+						DO1 = 1;
+						processingManager.ExecuteWriteCommand(points[0].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress,
+															pointIdentifiers[0].Address, DO1);
+					}
+						
+					if (DO2 == 0)
+					{
+						DO2 = 1;
+						processingManager.ExecuteWriteCommand(points[1].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress,
+															pointIdentifiers[1].Address, DO2);
+					}
+						
+					if (AO1 < 1000 || AO1 > 4500)
+					{
+						AO1 = 2000;
+						processingManager.ExecuteWriteCommand(points[6].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress,
+															pointIdentifiers[6].Address, (int)AO1);
+					}
+						
+					if (AO2 < 1000 || AO2 > 4500)
+					{
+						AO2 = 2000;
+						processingManager.ExecuteWriteCommand(points[7].ConfigItem, configuration.GetTransactionId(), configuration.UnitAddress,
+															pointIdentifiers[7].Address, (int)AO2);
+					}
+					
+					counter = 0;
+				}
+				automationTrigger.WaitOne();
+				++counter;
+			}
 		}
 
 		#region IDisposable Support

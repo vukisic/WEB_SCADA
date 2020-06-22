@@ -10,6 +10,7 @@ namespace WebApi.Hubs
 {
     /// <summary>
     /// Application Main SingalR Hub
+    /// Access via localhost : port \ hub
     /// </summary>
     public class AppHub : Hub
     {

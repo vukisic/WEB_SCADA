@@ -120,10 +120,10 @@ export class MainComponent implements OnInit {
 
   /// Function that checks if command is valid eg. is commanded value in alarm scope
   isValidCommand() {
+    const commandValue = this.commandModel.get('Value').value;
     if (this.selectedPoint !== undefined && this.selectedPoint.type === PointType.ANALOG_OUTPUT) {
-      const commandValue = this.commandModel.get('Value').value;
-      if (commandValue >= this.commandModel.get('HighLimit').value ||
-          commandValue <= this.commandModel.get('LowLimit').value ||
+      if (commandValue > this.commandModel.get('HighLimit').value ||
+          commandValue < this.commandModel.get('LowLimit').value ||
           commandValue < this.selectedPoint.configItem.minValue ||
           commandValue > this.selectedPoint.configItem.maxValue) {
         return false;
@@ -131,7 +131,11 @@ export class MainComponent implements OnInit {
         return true;
       }
     } else {
-      return true;
+      if (commandValue > 1 || commandValue < 0) {
+        return false;
+      } else {
+        return true;
+      }
     }
   }
 
